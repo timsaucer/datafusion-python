@@ -30,9 +30,15 @@ github:
   features:
     issues: true
   protected_branches:
-    main:
-      required_pull_request_reviews:
-        required_approving_review_count: 1
+    test_main:
+      required_status_checks:
+        strict: true
+        contexts:
+          - "test-matrix"
+          - "merge-build-artifacts"
+          - "rat"
+          - "build-docs"
+          - "test-matrix"
 
 staging:
   whoami: asf-staging
