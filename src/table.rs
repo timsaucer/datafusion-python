@@ -134,7 +134,7 @@ impl TableProvider for TempViewTable {
     }
 
     fn schema(&self) -> SchemaRef {
-        Arc::new(self.df.schema().into())
+        Arc::clone(self.df.schema().as_ref())
     }
 
     fn table_type(&self) -> TableType {

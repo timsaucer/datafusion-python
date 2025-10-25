@@ -38,10 +38,11 @@ impl PyPlaceholder {
         self.placeholder.id.clone()
     }
 
+    // TODO now that the inner struct holds field we should expose it instead
     fn data_type(&self) -> Option<PyDataType> {
         self.placeholder
-            .data_type
+            .field
             .as_ref()
-            .map(|e| e.clone().into())
+            .map(|f| f.data_type().clone().into())
     }
 }

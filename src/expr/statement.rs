@@ -15,11 +15,13 @@
 // specific language governing permissions and limitations
 // under the License.
 
+use arrow::datatypes::{DataType, Field};
 use datafusion::logical_expr::{
     Deallocate, Execute, Prepare, SetVariable, TransactionAccessMode, TransactionConclusion,
     TransactionEnd, TransactionIsolationLevel, TransactionStart,
 };
 use pyo3::{prelude::*, IntoPyObjectExt};
+use std::sync::Arc;
 
 use crate::{common::data_type::PyDataType, sql::logical::PyLogicalPlan};
 
@@ -334,17 +336,22 @@ impl LogicalNode for PyPrepare {
 
 #[pymethods]
 impl PyPrepare {
+    // TODO Now that we have field instead of datatype in the inner struct
+    // we should update the signatures below to match
     #[new]
     pub fn new(name: String, data_types: Vec<PyDataType>, input: PyLogicalPlan) -> Self {
         let input = input.plan().clone();
-        let data_types = data_types
+        let fields = data_types
             .into_iter()
-            .map(|data_type| data_type.into())
+            .map(|data_type| DataType::from(data_type))
+            .enumerate()
+            .map(|(idx, data_type)| Field::new(format!("field_{idx}"), data_type, true))
+            .map(Arc::new)
             .collect();
         PyPrepare {
             prepare: Prepare {
                 name,
-                data_types,
+                fields,
                 input,
             },
         }
@@ -356,10 +363,9 @@ impl PyPrepare {
 
     pub fn data_types(&self) -> Vec<PyDataType> {
         self.prepare
-            .data_types
-            .clone()
-            .into_iter()
-            .map(|t| t.into())
+            .fields
+            .iter()
+            .map(|f| f.data_type().to_owned().into())
             .collect()
     }
 

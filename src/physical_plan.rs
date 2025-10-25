@@ -83,7 +83,7 @@ impl PyExecutionPlan {
             })?;
 
         let codec = DefaultPhysicalExtensionCodec {};
-        let plan = proto_plan.try_into_physical_plan(&ctx.ctx, &ctx.ctx.runtime_env(), &codec)?;
+        let plan = proto_plan.try_into_physical_plan(&ctx.ctx.task_ctx(), &codec)?;
         Ok(Self::new(plan))
     }
 

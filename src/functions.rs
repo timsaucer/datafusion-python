@@ -41,7 +41,7 @@ use datafusion::functions;
 use datafusion::functions_aggregate;
 use datafusion::functions_window;
 use datafusion::logical_expr::expr::Alias;
-use datafusion::logical_expr::sqlparser::ast::NullTreatment as DFNullTreatment;
+use datafusion::logical_expr::expr::NullTreatment as DFNullTreatment;
 use datafusion::logical_expr::{expr::WindowFunction, lit, Expr, WindowFunctionDefinition};
 
 fn add_builder_fns_to_aggregate(

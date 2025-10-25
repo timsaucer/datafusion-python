@@ -412,7 +412,7 @@ impl PyDataFrame {
 
     /// Returns the schema from the logical plan
     fn schema(&self) -> PyArrowType<Schema> {
-        PyArrowType(self.df.schema().into())
+        PyArrowType(self.df.schema().as_arrow().to_owned())
     }
 
     /// Convert this DataFrame into a Table Provider that can be used in register_table
@@ -925,7 +925,7 @@ impl PyDataFrame {
         requested_schema: Option<Bound<'py, PyCapsule>>,
     ) -> PyDataFusionResult<Bound<'py, PyCapsule>> {
         let mut batches = wait_for_future(py, self.df.as_ref().clone().collect())??;
-        let mut schema: Schema = self.df.schema().to_owned().into();
+        let mut schema: Schema = self.df.schema().as_arrow().clone();
 
         if let Some(schema_capsule) = requested_schema {
             validate_pycapsule(&schema_capsule, "arrow_schema")?;
