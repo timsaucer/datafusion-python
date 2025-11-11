@@ -343,7 +343,7 @@ impl PyPrepare {
         let input = input.plan().clone();
         let fields = data_types
             .into_iter()
-            .map(|data_type| DataType::from(data_type))
+            .map(DataType::from)
             .enumerate()
             .map(|(idx, data_type)| Field::new(format!("field_{idx}"), data_type, true))
             .map(Arc::new)
