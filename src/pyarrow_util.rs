@@ -21,7 +21,7 @@ use arrow::array::{Array, ArrayData};
 use arrow::pyarrow::{FromPyArrow, ToPyArrow};
 use datafusion::scalar::ScalarValue;
 use pyo3::types::{PyAnyMethods, PyList};
-use pyo3::{Bound, FromPyObject, PyAny, PyObject, PyResult, Python};
+use pyo3::{Bound, FromPyObject, PyAny, PyResult, Python};
 
 use crate::common::data_type::PyScalarValue;
 use crate::errors::PyDataFusionError;

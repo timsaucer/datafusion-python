@@ -46,7 +46,7 @@ struct RustPartitionEvaluator {
 }
 
 impl RustPartitionEvaluator {
-    fn new(evaluator: PyObject) -> Self {
+    fn new(evaluator: Py<PyAny>) -> Self {
         Self { evaluator }
     }
 }
@@ -198,7 +198,7 @@ impl PartitionEvaluator for RustPartitionEvaluator {
     }
 }
 
-pub fn to_rust_partition_evaluator(evaluator: PyObject) -> PartitionEvaluatorFactory {
+pub fn to_rust_partition_evaluator(evaluator: Py<PyAny>) -> PartitionEvaluatorFactory {
     Arc::new(move || -> Result<Box<dyn PartitionEvaluator>> {
         let evaluator = Python::attach(|py| {
             evaluator
@@ -222,7 +222,7 @@ impl PyWindowUDF {
     #[pyo3(signature=(name, evaluator, input_types, return_type, volatility))]
     fn new(
         name: &str,
-        evaluator: PyObject,
+        evaluator: Py<PyAny>,
         input_types: Vec<PyArrowType<DataType>>,
         return_type: PyArrowType<DataType>,
         volatility: &str,

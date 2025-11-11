@@ -62,7 +62,7 @@ impl From<Arc<dyn SchemaProvider>> for PySchema {
 #[pymethods]
 impl PyCatalog {
     #[new]
-    fn new(catalog: PyObject) -> Self {
+    fn new(catalog: Py<PyAny>) -> Self {
         let catalog_provider =
             Arc::new(RustWrappedPyCatalogProvider::new(catalog)) as Arc<dyn CatalogProvider>;
         catalog_provider.into()
@@ -80,7 +80,7 @@ impl PyCatalog {
     }
 
     #[pyo3(signature = (name="public"))]
-    fn schema(&self, name: &str) -> PyResult<PyObject> {
+    fn schema(&self, name: &str) -> PyResult<Py<PyAny>> {
         let schema = self
             .catalog
             .schema(name)
@@ -145,7 +145,7 @@ impl PyCatalog {
 #[pymethods]
 impl PySchema {
     #[new]
-    fn new(schema_provider: PyObject) -> Self {
+    fn new(schema_provider: Py<PyAny>) -> Self {
         let schema_provider =
             Arc::new(RustWrappedPySchemaProvider::new(schema_provider)) as Arc<dyn SchemaProvider>;
         schema_provider.into()
@@ -201,12 +201,12 @@ impl PySchema {
 
 #[derive(Debug)]
 pub(crate) struct RustWrappedPySchemaProvider {
-    schema_provider: PyObject,
+    schema_provider: Py<PyAny>,
     owner_name: Option<String>,
 }
 
 impl RustWrappedPySchemaProvider {
-    pub fn new(schema_provider: PyObject) -> Self {
+    pub fn new(schema_provider: Py<PyAny>) -> Self {
         let owner_name = Python::attach(|py| {
             schema_provider
                 .bind(py)
@@ -324,11 +324,11 @@ impl SchemaProvider for RustWrappedPySchemaProvider {
 
 #[derive(Debug)]
 pub(crate) struct RustWrappedPyCatalogProvider {
-    pub(crate) catalog_provider: PyObject,
+    pub(crate) catalog_provider: Py<PyAny>,
 }
 
 impl RustWrappedPyCatalogProvider {
-    pub fn new(catalog_provider: PyObject) -> Self {
+    pub fn new(catalog_provider: Py<PyAny>) -> Self {
         Self { catalog_provider }
     }
 

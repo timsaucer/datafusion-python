@@ -73,7 +73,7 @@ impl PyConfig {
     }
 
     /// Get all configuration options
-    pub fn get_all(&self, py: Python) -> PyResult<PyObject> {
+    pub fn get_all<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyDict>> {
         let entries: Vec<(String, Option<String>)> = {
             let options = self.config.read();
             options
@@ -87,7 +87,7 @@ impl PyConfig {
         for (key, value) in entries {
             dict.set_item(key, value.into_pyobject(py)?)?;
         }
-        Ok(dict.into())
+        Ok(dict)
     }
 
     fn __repr__(&self, py: Python) -> PyResult<String> {

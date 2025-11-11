@@ -41,7 +41,7 @@ use crate::pyarrow_filter_expression::PyArrowFilterExpression;
 // Wraps a pyarrow.dataset.Dataset class and implements a Datafusion TableProvider around it
 #[derive(Debug)]
 pub(crate) struct Dataset {
-    dataset: PyObject,
+    dataset: Py<PyAny>,
 }
 
 impl Dataset {

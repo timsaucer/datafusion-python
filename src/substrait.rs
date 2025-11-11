@@ -35,12 +35,12 @@ pub struct PyPlan {
 
 #[pymethods]
 impl PyPlan {
-    fn encode(&self, py: Python) -> PyResult<PyObject> {
+    fn encode<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyBytes>> {
         let mut proto_bytes = Vec::<u8>::new();
         self.plan
             .encode(&mut proto_bytes)
             .map_err(PyDataFusionError::EncodeError)?;
-        Ok(PyBytes::new(py, &proto_bytes).into())
+        Ok(PyBytes::new(py, &proto_bytes))
     }
 }
 
@@ -83,20 +83,20 @@ impl PySubstraitSerializer {
         py: Python,
     ) -> PyDataFusionResult<PyPlan> {
         PySubstraitSerializer::serialize_bytes(sql, ctx, py).and_then(|proto_bytes| {
-            let proto_bytes = proto_bytes.bind(py).downcast::<PyBytes>().unwrap();
+            let proto_bytes = proto_bytes.downcast::<PyBytes>().unwrap();
             PySubstraitSerializer::deserialize_bytes(proto_bytes.as_bytes().to_vec(), py)
         })
     }
 
     #[staticmethod]
-    pub fn serialize_bytes(
+    pub fn serialize_bytes<'py>(
         sql: &str,
         ctx: PySessionContext,
-        py: Python,
-    ) -> PyDataFusionResult<PyObject> {
+        py: Python<'py>,
+    ) -> PyDataFusionResult<Bound<'py, PyBytes>> {
         let proto_bytes: Vec<u8> =
             wait_for_future(py, serializer::serialize_bytes(sql, &ctx.ctx))??;
-        Ok(PyBytes::new(py, &proto_bytes).into())
+        Ok(PyBytes::new(py, &proto_bytes))
     }
 
     #[staticmethod]

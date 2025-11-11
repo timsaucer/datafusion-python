@@ -25,7 +25,7 @@ use datafusion::physical_plan::SendableRecordBatchStream;
 use futures::StreamExt;
 use pyo3::exceptions::{PyStopAsyncIteration, PyStopIteration};
 use pyo3::prelude::*;
-use pyo3::{pyclass, pymethods, PyObject, PyResult, Python};
+use pyo3::{pyclass, pymethods, PyResult, Python};
 use tokio::sync::Mutex;
 
 #[pyclass(name = "RecordBatch", module = "datafusion", subclass, frozen)]

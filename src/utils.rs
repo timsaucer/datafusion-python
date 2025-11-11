@@ -77,7 +77,7 @@ where
     let runtime: &Runtime = &get_tokio_runtime().0;
     const INTERVAL_CHECK_SIGNALS: Duration = Duration::from_millis(1_000);
 
-    py.allow_threads(|| {
+    py.detach(|| {
         runtime.block_on(async {
             tokio::pin!(fut);
             loop {

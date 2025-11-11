@@ -68,18 +68,18 @@ impl Iterator for PyArrowBatchesAdapter {
 // Wraps a pyarrow.dataset.Dataset class and implements a Datafusion ExecutionPlan around it
 #[derive(Debug)]
 pub(crate) struct DatasetExec {
-    dataset: PyObject,
+    dataset: Py<PyAny>,
     schema: SchemaRef,
     fragments: Py<PyList>,
     columns: Option<Vec<String>>,
-    filter_expr: Option<PyObject>,
+    filter_expr: Option<Py<PyAny>>,
     projected_statistics: Statistics,
     plan_properties: datafusion::physical_plan::PlanProperties,
 }
 
 impl DatasetExec {
-    pub fn new(
-        py: Python,
+    pub fn new<'py>(
+        py: Python<'py>,
         dataset: &Bound<'_, PyAny>,
         projection: Option<Vec<usize>>,
         filters: &[Expr],
@@ -97,7 +97,7 @@ impl DatasetExec {
                 .collect()
         });
         let columns: Option<Vec<String>> = columns.transpose()?;
-        let filter_expr: Option<PyObject> = conjunction(filters.to_owned())
+        let filter_expr: Option<Py<PyAny>> = conjunction(filters.to_owned())
             .map(|filters| {
                 PyArrowFilterExpression::try_from(&filters)
                     .map(|filter_expr| filter_expr.inner().clone_ref(py))

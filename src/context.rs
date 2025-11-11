@@ -850,7 +850,7 @@ impl PySessionContext {
     }
 
     #[pyo3(signature = (name="datafusion"))]
-    pub fn catalog(&self, name: &str) -> PyResult<PyObject> {
+    pub fn catalog(&self, name: &str) -> PyResult<Py<PyAny>> {
         let catalog = self.ctx.catalog(name).ok_or(PyKeyError::new_err(format!(
             "Catalog with name {name} doesn't exist."
         )))?;

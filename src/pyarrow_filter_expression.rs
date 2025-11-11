@@ -29,7 +29,7 @@ use crate::pyarrow_util::scalar_to_pyarrow;
 
 #[derive(Debug)]
 #[repr(transparent)]
-pub(crate) struct PyArrowFilterExpression(PyObject);
+pub(crate) struct PyArrowFilterExpression(Py<PyAny>);
 
 fn operator_to_py<'py>(
     operator: &Operator,
@@ -88,7 +88,7 @@ fn extract_scalar_list<'py>(
 }
 
 impl PyArrowFilterExpression {
-    pub fn inner(&self) -> &PyObject {
+    pub fn inner(&self) -> &Py<PyAny> {
         &self.0
     }
 }
