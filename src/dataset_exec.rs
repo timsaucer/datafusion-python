@@ -53,7 +53,7 @@ impl Iterator for PyArrowBatchesAdapter {
     type Item = ArrowResult<RecordBatch>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        Python::with_gil(|py| {
+        Python::attach(|py| {
             let mut batches = self.batches.clone_ref(py).into_bound(py);
             Some(
                 batches
@@ -187,7 +187,7 @@ impl ExecutionPlan for DatasetExec {
         context: Arc<TaskContext>,
     ) -> DFResult<SendableRecordBatchStream> {
         let batch_size = context.session_config().batch_size();
-        Python::with_gil(|py| {
+        Python::attach(|py| {
             let dataset = self.dataset.bind(py);
             let fragments = self.fragments.bind(py);
             let fragment = fragments
@@ -272,7 +272,7 @@ impl ExecutionPlanProperties for DatasetExec {
 
 impl DisplayAs for DatasetExec {
     fn fmt_as(&self, t: DisplayFormatType, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        Python::with_gil(|py| {
+        Python::attach(|py| {
             let number_of_fragments = self.fragments.bind(py).len();
             match t {
                 DisplayFormatType::Default

@@ -855,7 +855,7 @@ impl PySessionContext {
             "Catalog with name {name} doesn't exist."
         )))?;
 
-        Python::with_gil(|py| {
+        Python::attach(|py| {
             match catalog
                 .as_any()
                 .downcast_ref::<RustWrappedPyCatalogProvider>()

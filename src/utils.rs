@@ -84,7 +84,7 @@ where
                 tokio::select! {
                     res = &mut fut => break Ok(res),
                     _ = sleep(INTERVAL_CHECK_SIGNALS) => {
-                        Python::with_gil(|py| py.check_signals())?;
+                        Python::attach(|py| py.check_signals())?;
                     }
                 }
             }

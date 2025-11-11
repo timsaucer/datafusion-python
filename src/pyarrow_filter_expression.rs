@@ -101,7 +101,7 @@ impl TryFrom<&Expr> for PyArrowFilterExpression {
     // isin, is_null, and is_valid (~is_null) are methods of pyarrow.dataset.Expression
     // https://arrow.apache.org/docs/python/generated/pyarrow.dataset.Expression.html#pyarrow-dataset-expression
     fn try_from(expr: &Expr) -> Result<Self, Self::Error> {
-        Python::with_gil(|py| {
+        Python::attach(|py| {
             let pc = Python::import(py, "pyarrow.compute")?;
             let op_module = Python::import(py, "operator")?;
             let pc_expr: PyDataFusionResult<Bound<'_, PyAny>> = match expr {

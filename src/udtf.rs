@@ -39,7 +39,7 @@ pub struct PyTableFunction {
 // TODO: Implement pure python based user defined table functions
 #[derive(Debug, Clone)]
 pub(crate) enum PyTableFunctionInner {
-    PythonFunction(Arc<PyObject>),
+    PythonFunction(Arc<Py<PyAny>>),
     FFIFunction(Arc<dyn TableFunctionImpl>),
 }
 
@@ -83,7 +83,7 @@ impl PyTableFunction {
 
 #[allow(clippy::result_large_err)]
 fn call_python_table_function(
-    func: &Arc<PyObject>,
+    func: &Arc<Py<PyAny>>,
     args: &[Expr],
 ) -> DataFusionResult<Arc<dyn TableProvider>> {
     let args = args
@@ -91,8 +91,7 @@ fn call_python_table_function(
         .map(|arg| PyExpr::from(arg.clone()))
         .collect::<Vec<_>>();
 
-    // move |args: &[ArrayRef]| -> Result<ArrayRef, DataFusionError> {
-    Python::with_gil(|py| {
+    Python::attach(|py| {
         let py_args = PyTuple::new(py, args)?;
         let provider_obj = func.call1(py, py_args)?;
         let provider = provider_obj.bind(py);
