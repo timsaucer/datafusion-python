@@ -35,7 +35,7 @@ pub struct PyRecordBatch {
 
 #[pymethods]
 impl PyRecordBatch {
-    fn to_pyarrow(&self, py: Python) -> PyResult<PyObject> {
+    fn to_pyarrow<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyAny>> {
         self.batch.to_pyarrow(py)
     }
 }

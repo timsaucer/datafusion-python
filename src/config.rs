@@ -65,7 +65,7 @@ impl PyConfig {
     }
 
     /// Set a configuration option
-    pub fn set(&self, key: &str, value: PyObject, py: Python) -> PyDataFusionResult<()> {
+    pub fn set(&self, key: &str, value: Bound<PyAny>, py: Python) -> PyDataFusionResult<()> {
         let scalar_value = py_obj_to_scalar_value(py, value)?;
         let mut options = self.config.write();
         options.set(key, scalar_value.to_string().as_str())?;

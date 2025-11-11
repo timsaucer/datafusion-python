@@ -51,11 +51,11 @@ impl<'source> FromPyObject<'source> for PyScalarValue {
     }
 }
 
-pub fn scalar_to_pyarrow(scalar: &ScalarValue, py: Python) -> PyResult<PyObject> {
+pub fn scalar_to_pyarrow<'py>(scalar: &ScalarValue, py: Python<'py>) -> PyResult<Bound<'py, PyAny>> {
     let array = scalar.to_array().map_err(PyDataFusionError::from)?;
     // convert to pyarrow array using C data interface
     let pyarray = array.to_data().to_pyarrow(py)?;
-    let pyscalar = pyarray.call_method1(py, "__getitem__", (0,))?;
+    let pyscalar = pyarray.call_method1("__getitem__", (0,))?;
 
     Ok(pyscalar)
 }

@@ -381,7 +381,7 @@ impl PyExpr {
     }
 
     /// Extracts the Expr value into a PyObject that can be shared with Python
-    pub fn python_value(&self, py: Python) -> PyResult<PyObject> {
+    pub fn python_value<'py>(&self, py: Python<'py>) -> PyResult<Bound<'py, PyAny>> {
         match &self.expr {
             Expr::Literal(scalar_value, _) => scalar_to_pyarrow(scalar_value, py),
             _ => Err(py_type_err(format!(

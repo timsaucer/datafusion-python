@@ -141,7 +141,7 @@ pub(crate) fn table_provider_from_pycapsule(
     }
 }
 
-pub(crate) fn py_obj_to_scalar_value(py: Python, obj: PyObject) -> PyResult<ScalarValue> {
+pub(crate) fn py_obj_to_scalar_value(py: Python, obj: Bound<PyAny>) -> PyResult<ScalarValue> {
     // convert Python object to PyScalarValue to ScalarValue
 
     let pa = py.import("pyarrow")?;

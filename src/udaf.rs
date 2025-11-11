@@ -90,7 +90,7 @@ impl Accumulator for RustAccumulator {
     fn merge_batch(&mut self, states: &[ArrayRef]) -> Result<()> {
         Python::with_gil(|py| {
             // // 1. cast states to Pyarrow arrays
-            let py_states: Result<Vec<PyObject>> = states
+            let py_states: Result<Vec<Bound<PyAny>>> = states
                 .iter()
                 .map(|state| {
                     state
