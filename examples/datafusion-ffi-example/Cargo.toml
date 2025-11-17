@@ -21,17 +21,22 @@ version = "0.2.0"
 edition = "2021"
 
 [dependencies]
-datafusion = { version = "49.0.2" }
-datafusion-ffi = { version = "49.0.2" }
-pyo3 = { version = "0.23", features = ["extension-module", "abi3", "abi3-py39"] }
-arrow = { version = "55.0.0" }
-arrow-array = { version = "55.0.0" }
-arrow-schema = { version = "55.0.0" }
+datafusion = { version = "51" }
+datafusion-ffi = { version = "51" }
+pyo3 = { version = "0.26", features = ["extension-module", "abi3", "abi3-py39"] }
+arrow = { version = "57" }
+arrow-array = { version = "57" }
+arrow-schema = { version = "57" }
 async-trait = "0.1.88"
 
 [build-dependencies]
-pyo3-build-config = "0.23"
+pyo3-build-config = "0.26"
 
 [lib]
 name = "datafusion_ffi_example"
 crate-type = ["cdylib", "rlib"]
+
+
+[patch.crates-io]
+datafusion = { git = "https://github.com/apache/datafusion", rev = "fd35a09438a2b4841431f5e86ffef378cbbda7c9" }
+datafusion-ffi = { git = "https://github.com/apache/datafusion", rev = "fd35a09438a2b4841431f5e86ffef378cbbda7c9" }

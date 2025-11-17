@@ -27,7 +27,7 @@ use std::any::Any;
 use std::sync::Arc;
 
 #[pyclass(name = "MyRankUDF", module = "datafusion_ffi_example", subclass)]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub(crate) struct MyRankUDF {
     inner: Arc<WindowUDF>,
 }

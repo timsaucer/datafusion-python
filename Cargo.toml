@@ -65,7 +65,7 @@ lto = true
 codegen-units = 1
 
 [patch.crates-io]
-datafusion = { git = "https://github.com/apache/datafusion", branch = "branch-51" }
-datafusion-substrait = { git = "https://github.com/apache/datafusion", branch = "branch-51" }
-datafusion-proto = { git = "https://github.com/apache/datafusion", branch = "branch-51" }
-datafusion-ffi = { git = "https://github.com/apache/datafusion", branch = "branch-51" }
+datafusion = { git = "https://github.com/apache/datafusion", rev = "fd35a09438a2b4841431f5e86ffef378cbbda7c9" }
+datafusion-substrait = { git = "https://github.com/apache/datafusion", rev = "fd35a09438a2b4841431f5e86ffef378cbbda7c9" }
+datafusion-proto = { git = "https://github.com/apache/datafusion", rev = "fd35a09438a2b4841431f5e86ffef378cbbda7c9" }
+datafusion-ffi = { git = "https://github.com/apache/datafusion", rev = "fd35a09438a2b4841431f5e86ffef378cbbda7c9" }
